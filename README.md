@@ -181,3 +181,7 @@ is a binding realization.
 
 When all bindings in a template are combined together, they make up its template realization. Practically,
 `TemplateRealization` objects also contain a specification, recalling what parameter values were substituted and how.
+
+## License
+
+MIT License (see the `LICENSE` file).
