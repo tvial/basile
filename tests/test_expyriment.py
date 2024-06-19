@@ -2,7 +2,7 @@ from unittest import TestCase
 from dataclasses import dataclass
 from typing import List
 
-from src.expyriment import *
+from expyriment import *
 
 
 @dataclass
