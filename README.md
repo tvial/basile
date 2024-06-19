@@ -1,4 +1,4 @@
-# Expyriment
+# Basile
 
 A lightweight, brute-force framework for discrete code-based experimentations.
 
@@ -8,15 +8,15 @@ some key figure. In many such cases, trial and error is time-consuming. Without 
 one often loses track of which combinations were tested, and what is the next parameter to tune up or
 down for the next scenario.
 
-**Expyriment** is a such a tool. It doesn't do much but it's very light and simple to use. Also, it does
+**Basile** is a such a tool. It doesn't do much but it's very light and simple to use. Also, it does
 not depend on a particular framework (e.g. Scikit-Learn's grid search), it is pure Python with no library
 dependency. It can be used in almost any situation where combinations of discrete parameters must be explored
 in a systematic way.
 
 There are two important words in the above sentence:
-- _discrete_: each parameter may take a finite number of values, Expyriment will not sample from
+- _discrete_: each parameter may take a finite number of values, Basile will not sample from
   continuous intervals. If needed, invervals may can be discretized in any fashion, but it's your job
-- _systematic_ (with _combinations_): Expyriment is not an optimizer, in that it won't guess the next
+- _systematic_ (with _combinations_): Basile is not an optimizer, in that it won't guess the next
   most promising combination based in the outcome of the previous one. Nor does it pick values at random:
   it will try every single combination, predictably
 
@@ -26,7 +26,7 @@ Here is a showcase of the possibilities:
 
 ```python
 from dataclasses import dataclass
-from expyriment import Either, count_realizations, realize_template
+from basile import Either, count_realizations, realize_template
 
 @dataclass
 class Level2:
@@ -72,19 +72,19 @@ The `concrete` object is of type `TemplateRealization`. It has two attributes
 - `realization`, which holds an object with the same structure as the template, with no more `Either`s in it. This is the
   item we would use in the core of our application
 
-Note that Expyriment only works with iterators, it never materializes combinations in lists or other memory demanding
+Note that Basile only works with iterators, it never materializes combinations in lists or other memory demanding
 structures. This makes it suitable for scenarios with high cardinalities leading to combinatorial explosion. Process time
 would certainly be a concern at this point, but not memory.
 
 ## Recipes
 
-As mentioned above, Expyriment does little in itself, and it's quite dumb. Here are some recipes for more elaborate needs.
+As mentioned above, Basile does little in itself, and it's quite dumb. Here are some recipes for more elaborate needs.
 
 ### When parameters are interdependant
 
 Often, not all combinations of parameters are admissible. For example, in our toy scenario above, `field2 = [2, 3, 4]`
 could be valid only for `field3.field1 in ('abc', 'def')`, and `field2 = [4, 5, 6]` for `field3.field1 in ('def', 'ghi')`.
-However Expyriment will happily generate a cross product of all candidates, including the invalid combinations.
+However Basile will happily generate a cross product of all candidates, including the invalid combinations.
 
 In such a case, we would inspect the concrete parameters (`concrete.realization`), and skip loop iterations when a
 certain business rule is not satisfied. Or, better, apply Python's built-in `filter()` function to the result of
@@ -93,7 +93,7 @@ certain business rule is not satisfied. Or, better, apply Python's built-in `fil
 ### Checkpointing and idempotence
 
 When the number of combinations is large, and when each iteration takes time to complete, one might not want to restart
-the loop from scratch if the program was interrupted in the middle. Expyriment is 100% deterministic so it's easy to
+the loop from scratch if the program was interrupted in the middle. Basile is 100% deterministic so it's easy to
 exploit that.
 
 There are many ways to record what combinations were worked out already; here is a hacky yet simple one:
@@ -122,7 +122,7 @@ be closed until all iterations are complete.
 ## Concepts
 
 While the API itself is simple, the inner workings are more complex and can use a bit of explaining. Here is a
-description of all the concepts used in Expyriment.
+description of all the concepts used in ExpBasileyriment.
 
 ### Candidates
 
@@ -138,14 +138,14 @@ In the toy example above, there are 2 candidates, one with 2 values (lists) and 
 A template is an object which can be made variable, by substituting values inside it via candidates. In code, the
 only thing that makes it a template is the use of `Either` instances somewhere down its hierarchy. Apart from
 that, the template can be structured in any possible way, with the following caveats:
-- when walking the template object to find candidates, Expyriment will only recurse inside dataclass instances,
+- when walking the template object to find candidates, Basile will only recurse inside dataclass instances,
   lists, tuples and dictionaries (any other types will be left untouched)
 - there is no cycle detection to prevent it from going into an infinite loop if there are inter-references between
   child objects and/or subcollections
 
 ### Access path
 
-When walking the template looking for candidates, Expyriment keeps track of where it is down the hierarchy. This is
+When walking the template looking for candidates, Basile keeps track of where it is down the hierarchy. This is
 materialized by an access path, which is a list of `CandidateAccess` access objects holding:
 - `access_type`: the access mode of the containing element -- dataclass, list, tuple or dict
 - `position`: the position of the current item in its container (attribute name for a containing dataclass, index for
@@ -162,7 +162,7 @@ Conversely, if candidates were in a dictionary, say `field5={'a': Either(20, 21)
 access paths would be: `'field5.a'` and `'field5.b'`.
 
 For candidates buried deeper in the hierarchy, there would be more elements in the dot-separated chains. The representations
-above with dots are for human readability, they are not involved in Expyriment's processing logic. However, they will
+above with dots are for human readability, they are not involved in Basile's processing logic. However, they will
 appear in the `specification` field of realizations, as dictionary keys. So using dictionary keys with dots should not
 break anything.
 

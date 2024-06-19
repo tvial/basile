@@ -22,7 +22,7 @@ from unittest import TestCase
 from dataclasses import dataclass
 from typing import List
 
-from expyriment import *
+from basile import *
 
 
 @dataclass
