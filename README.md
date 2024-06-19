@@ -158,7 +158,7 @@ In the example above, the access paths of the candidates can be represented as:
 If candidates were in a list, say `field4=[Either(10, 11, 12), Either(13, 14, 15)]`, there would be 2 access
 paths: `'field4.0'` and `'field4.1'`. It would be the same for a tuple.
 
-Concersely, if candidates were in a dictionary, say `field5={'a': Either(20, 21), 'b': Either(22, 23)}`, the
+Conversely, if candidates were in a dictionary, say `field5={'a': Either(20, 21), 'b': Either(22, 23)}`, the
 access paths would be: `'field5.a'` and `'field5.b'`.
 
 For candidates buried deeper in the hierarchy, there would be more elements in the dot-separated chains. The representations
