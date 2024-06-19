@@ -52,7 +52,7 @@ class CandidateAccess:
 
 
 @dataclass(init=False)
-class Candidates:
+class Either:
     """Placeholder for candidate values in templates"""
     values: List[Any]
 
@@ -164,7 +164,7 @@ class BindingRealization:
 
 @dataclass
 class Binding:
-    """A binding associates an access path with a list of candidate values given by a `Candidates` object
+    """A binding associates an access path with a list of candidate values given by an `Either` object
     """
 
     #: Access path to the element to bind to
@@ -211,7 +211,7 @@ def _get_bindings(path: List[CandidateAccess], container: Any) -> Iterable[Bindi
     Iterable[Binding]
         Bindings made from candidate values found under `container`
     """
-    if isinstance(container, Candidates):
+    if isinstance(container, Either):
         # If we encounter a Candidate, stop recursion, otherwise go deeper
         yield Binding(path, container.values)
     elif is_dataclass(container):
@@ -318,7 +318,7 @@ def _realize(template: Any, binding_realizations: Iterable[BindingRealization]) 
     Parameters
     ----------
     template
-        Template with `Candidates` inside
+        Template containing`Either` instances
     binding_realizations : Iterable[BindingRealization]
         Binding realizations to apply to the template
 

@@ -51,7 +51,7 @@ class TestBinder(TestCase):
     def test_binding_at_level1(self):
         template = Level1(
             field1=1,
-            field2=Candidates([2, 3, 4], [4, 5, 6]),
+            field2=Either([2, 3, 4], [4, 5, 6]),
             field3=Level2(field1='abc')
         )
 
@@ -80,7 +80,7 @@ class TestBinder(TestCase):
         template = Level1(
             field1=1,
             field2=[2, 3, 4],
-            field3=Level2(field1=Candidates('abc', 'def'))
+            field3=Level2(field1=Either('abc', 'def'))
         )
 
         expected = [
@@ -107,8 +107,8 @@ class TestBinder(TestCase):
     def test_binding_at_both_levels(self):
         template = Level1(
             field1=1,
-            field2=Candidates([2, 3, 4], [4, 5, 6]),
-            field3=Level2(field1=Candidates('abc', 'def', 'ghi'))
+            field2=Either([2, 3, 4], [4, 5, 6]),
+            field3=Level2(field1=Either('abc', 'def', 'ghi'))
         )
 
         expected = [
@@ -167,7 +167,7 @@ class TestBinder(TestCase):
     def test_binding_from_list(self):
         template = Level1(
             field1=1,
-            field2=[1, Candidates(11, 12), Candidates(21, 22, 23)],
+            field2=[1, Either(11, 12), Either(21, 22, 23)],
             field3=Level2(field1='abc')
         )
 
@@ -233,7 +233,7 @@ class TestBinder(TestCase):
     def test_binding_from_tuple(self):
         template = Level1(
             field1=1,
-            field2=(1, Candidates(11, 12), Candidates(21, 22, 23)),
+            field2=(1, Either(11, 12), Either(21, 22, 23)),
             field3=Level2(field1='abc')
         )
 
@@ -299,7 +299,7 @@ class TestBinder(TestCase):
     def test_binding_from_dict(self):
         template = Level1(
             field1=1,
-            field2={'a': 1, 'b': Candidates(11, 12), 'c': Candidates(21, 22, 23)},
+            field2={'a': 1, 'b': Either(11, 12), 'c': Either(21, 22, 23)},
             field3=Level2(field1='abc')
         )
 
@@ -364,9 +364,9 @@ class TestBinder(TestCase):
 
     def test_count_realizations(self):
         template = Level1(
-            field1=Candidates(1, 2, 3),
-            field2={'a': 1, 'b': Candidates(11, 12), 'c': Candidates(21, 22, 23)},
-            field3=Level2(field1=Candidates('abc', 'def', 'ghi', 'jkl'))
+            field1=Either(1, 2, 3),
+            field2={'a': 1, 'b': Either(11, 12), 'c': Either(21, 22, 23)},
+            field3=Level2(field1=Either('abc', 'def', 'ghi', 'jkl'))
         )
 
         self.assertEqual(3*1*2*3*4, count_realizations(template))
