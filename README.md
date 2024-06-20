@@ -22,6 +22,11 @@ There are two important words in the above sentence:
 
 ## Example
 
+The package can be installed with `pip`:
+```
+pip install basile
+```
+
 Here is a showcase of the possibilities:
 
 ```python
@@ -80,7 +85,7 @@ would certainly be a concern at this point, but not memory.
 
 As mentioned above, Basile does little in itself, and it's quite dumb. Here are some recipes for more elaborate needs.
 
-### When parameters are interdependant
+### When parameters are interdependent
 
 Often, not all combinations of parameters are admissible. For example, in our toy scenario above, `field2 = [2, 3, 4]`
 could be valid only for `field3.field1 in ('abc', 'def')`, and `field2 = [4, 5, 6]` for `field3.field1 in ('def', 'ghi')`.
